@@ -59,6 +59,7 @@ def tess_text(img, img_type='КД'):
     text = text.replace('\f', '')
     text = text.replace('"', '')
     text = text.replace('$', '8')
+    text = text.replace('|', '')
     text = text.lstrip()
     text = text.rstrip()
     if img_type == 'ТЕКСТ':
