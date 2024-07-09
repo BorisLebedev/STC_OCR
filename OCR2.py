@@ -105,16 +105,7 @@ def rename_and_save(directory, file, directory_result, name, try_num=0):
                         file=file,
                         try_num=try_num)
 
-
-if __name__ == '__main__':
-    product = connect_db('P:/20016000 Технологический отдел/_Макросы/STC_DB/DB_new.db')
-    directory = 'scan'
-    directory_result = 'documents'
-    temp_image = "temp.png"
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Users\boiu.lebedev\AppData\Local\Tesseract-OCR\tesseract.exe'
-    kd_crop = (6.25, 4.06, 2.05, 1.45)  #(6.25, 4.76, 2.05, 1.45)
-    td_crop = (6.25, 4.06, 1.22, 1.03)  #(6.25, 4.76, 1.22, 1.03)
-    tt_crop = (4.5, 3.27, 2.55, 1.18)   #(4.5, 3.97, 2.55, 1.18)
+def convert():
     for file in listdir(directory):
         try:
             convert_file(file=path.join(directory, file),
@@ -143,9 +134,29 @@ if __name__ == '__main__':
                     td_name = 'НЕИЗВЕСТНО'
             name = f'{kd_deno} ({td_deno}) {td_name}'
             name = name.replace('/', ' . ')
+            name = name.replace('"', '')
             rename_and_save(directory=directory,
                             directory_result=directory_result,
                             file=file,
                             name=name)
-        except:
+        except AttributeError:
             pass
+        except FileNotFoundError:
+            rename_and_save(directory=directory,
+                            directory_result=directory_result,
+                            file=file,
+                            name='')
+        except RuntimeError:
+            convert()
+
+
+if __name__ == '__main__':
+    product = connect_db('P:/20016000 Технологический отдел/_Макросы/STC_DB/DB_new.db')
+    directory = 'scan'
+    directory_result = 'documents'
+    temp_image = "temp.png"
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Users\boiu.lebedev\AppData\Local\Tesseract-OCR\tesseract.exe'
+    kd_crop = (6.25, 4.06, 2.05, 1.45)  #(6.25, 4.76, 2.05, 1.45)
+    td_crop = (6.25, 4.06, 1.22, 1.03)  #(6.25, 4.76, 1.22, 1.03)
+    tt_crop = (4.5, 3.67, 2.55, 1.18)   #(4.5, 3.97, 2.55, 1.18)
+    convert()
