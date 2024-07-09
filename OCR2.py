@@ -152,7 +152,7 @@ def convert():
 
 
 if __name__ == '__main__':
-    product = connect_db('P:/20016000 Технологический отдел/_Макросы/STC_DB/DB_new.db')
+    product = connect_db('DB.db')
     directory = 'scan'
     directory_result = 'documents'
     temp_image = "temp.png"
