@@ -107,47 +107,48 @@ def rename_and_save(directory, file, directory_result, name, try_num=0):
 
 def convert():
     for file in listdir(directory):
-        try:
-            convert_file(file=path.join(directory, file),
-                         zoom=10)
-            img = cv2.imread(temp_image)
-            img_kd = crop_img(img=img,
-                              crop=kd_crop)
-            cv2.imwrite("kd_temp.png", img_kd)
+        if file != '.gitkeep':
+            try:
+                convert_file(file=path.join(directory, file),
+                             zoom=10)
+                img = cv2.imread(temp_image)
+                img_kd = crop_img(img=img,
+                                  crop=kd_crop)
+                cv2.imwrite("kd_temp.png", img_kd)
 
-            img_td = crop_img(img=img,
-                              crop=td_crop)
-            cv2.imwrite("td_temp.png", img_td)
+                img_td = crop_img(img=img,
+                                  crop=td_crop)
+                cv2.imwrite("td_temp.png", img_td)
 
-            img_tt = crop_img(img=img,
-                              crop=tt_crop)
-            cv2.imwrite("tt_temp.png", img_tt)
+                img_tt = crop_img(img=img,
+                                  crop=tt_crop)
+                cv2.imwrite("tt_temp.png", img_tt)
 
-            kd_deno = tess_text(img=img_kd, img_type='КД')
-            td_deno = tess_text(img=img_td, img_type='ТД')
-            if kd_deno in product:
-                td_name = product[kd_deno]
-            else:
-                try:
-                    td_name = tess_text(img=img_tt, img_type='ТЕКСТ')
-                except:
-                    td_name = 'НЕИЗВЕСТНО'
-            name = f'{kd_deno} ({td_deno}) {td_name}'
-            name = name.replace('/', ' . ')
-            name = name.replace('"', '')
-            rename_and_save(directory=directory,
-                            directory_result=directory_result,
-                            file=file,
-                            name=name)
-        except AttributeError:
-            pass
-        except FileNotFoundError:
-            rename_and_save(directory=directory,
-                            directory_result=directory_result,
-                            file=file,
-                            name='')
-        except RuntimeError:
-            convert()
+                kd_deno = tess_text(img=img_kd, img_type='КД')
+                td_deno = tess_text(img=img_td, img_type='ТД')
+                if kd_deno in product:
+                    td_name = product[kd_deno]
+                else:
+                    try:
+                        td_name = tess_text(img=img_tt, img_type='ТЕКСТ')
+                    except:
+                        td_name = 'НЕИЗВЕСТНО'
+                name = f'{kd_deno} ({td_deno}) {td_name}'
+                name = name.replace('/', ' . ')
+                name = name.replace('"', '')
+                rename_and_save(directory=directory,
+                                directory_result=directory_result,
+                                file=file,
+                                name=name)
+            except AttributeError:
+                pass
+            except FileNotFoundError:
+                rename_and_save(directory=directory,
+                                directory_result=directory_result,
+                                file=file,
+                                name='')
+            except RuntimeError:
+                convert()
 
 
 if __name__ == '__main__':
