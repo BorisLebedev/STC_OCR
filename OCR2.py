@@ -153,8 +153,11 @@ def convert():
                     except:
                         td_name = 'НЕИЗВЕСТНО'
                 name = f'{kd_deno} ({td_deno}) {td_name}'
-                name = name.replace('/', ' . ')
-                name = name.replace('"', '')
+
+                for sym in ['/', '|', '\\', ':', '<', '>', '*', '?']:
+                    while sym in name:
+                        name = name.replace(sym, '')
+
                 rename_and_save(directory=directory,
                                 directory_result=directory_result,
                                 file=file,
