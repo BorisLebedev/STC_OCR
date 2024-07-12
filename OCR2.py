@@ -6,8 +6,7 @@ from os import path
 import cv2
 import pytesseract
 import sqlite3
-import numpy as np
-from PIL import Image
+
 
 def connect_db(db_name):
     global conn
