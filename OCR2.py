@@ -19,10 +19,11 @@ def connect_db(db_name):
     c = conn.cursor()
     with conn:
         c.execute("""SELECT name, deno FROM  product""")
-    product = {}
+    product_dict = {}
     for name, deno in c.fetchall():
-        product[deno] = name
-    return product
+        product_dict[deno] = name
+    return product_dict
+
 
 def convert_file(file, zoom):
     """ Считывает и подготавливает первый лист pdf """
@@ -34,6 +35,7 @@ def convert_file(file, zoom):
 
     pix = page.get_pixmap(matrix=mat)
     pix.save(temp_image)
+
 
 def crop_img(img, crop):
     """ Возвращает часть изображения """
