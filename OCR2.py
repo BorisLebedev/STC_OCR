@@ -9,6 +9,9 @@ import sqlite3
 
 
 def connect_db(db_name):
+    """ Возвращает наименование и децимальный номер изделия
+        из БД по децимальному номеру """
+
     global conn
     global c
     conn = sqlite3.connect(db_name)
@@ -22,6 +25,8 @@ def connect_db(db_name):
     return product
 
 def convert_file(file, zoom):
+    """ Считывает и подготавливает первый лист pdf """
+
     doc = fitz.open(file)
     page = doc.load_page(0)
     page.set_rotation(270)
@@ -31,6 +36,8 @@ def convert_file(file, zoom):
     pix.save(temp_image)
 
 def crop_img(img, crop):
+    """ Возвращает часть изображения """
+
     h = img.shape[0]
     w = img.shape[1]
     h1 = int(h//crop[0])  # kd950   td950   t1300   4.57
@@ -49,6 +56,8 @@ def crop_img(img, crop):
     return img[h1:h2, w1:w2]
 
 def tess_text(img, img_type='КД'):
+    """ Возвращает текст из участка изображения """
+
     # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # ret, thresh = cv2.threshold(gray, 180, 255, cv2.THRESH_BINARY)
     # img = cv2.erode(thresh, np.ones((1, 1), np.uint8), iterations=1)
@@ -66,6 +75,8 @@ def tess_text(img, img_type='КД'):
     return get_deno(text, img_type)
 
 def get_deno(text, img_type='КД'):
+    """ Извлекает децимальные номера из текста """
+
     deno_dev = r'[А-Я]{4}'
     deno_code = r'\.[0-9]{6}\.[0-9]{3}'
     deno_code_spo = r'\.[0-9]{5}-[0-9]{2}'
@@ -88,7 +99,10 @@ def get_deno(text, img_type='КД'):
         pass
     return text
 
+
 def rename_and_save(directory, file, directory_result, name, try_num=0):
+    """ Сохраняет документ """
+
     if try_num != 0:
         try_name = f' КОПИЯ {try_num}.pdf'
     else:
@@ -104,7 +118,11 @@ def rename_and_save(directory, file, directory_result, name, try_num=0):
                         file=file,
                         try_num=try_num)
 
+
 def convert():
+    """ Вызывает другие функции
+        для переименования документа """
+
     for file in listdir(directory):
         if file != '.gitkeep':
             try:
